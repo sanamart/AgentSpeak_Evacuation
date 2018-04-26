@@ -2,64 +2,84 @@
 
 /* Initial beliefs and rules */
 free.
-//at(P) :- pos(P,X,Y) & pos(rescuer,X,Y).
 
 /* Initial goals */
 
    /* Plans */
 	
 	//sending the leader my distance to I
-	+rescue(VX,VY,I)[source(A)]:free
+	+rescue(VX,VY,I)[source(A)]:free & not carryInjured
 		<-	.my_name(Me);
 			?pos(Me,AgX,AgY);
 			intactions.dist(AgX,AgY,VX,VY,D);
-			.print("My distance to ",I," is: ",D)
-			.broadcast(tell,iPickUp(I,D)).
+			.print("My distance to ",I," is: ",D);
+			!checkDistance(I,D).
+	
+	-rescue(VX,VY,I)
+		<- true.
+			
+	+!checkDistance(I,D) : D < 25
+		<-	.print("Checking distance: ",D);
+			//-free;
+			.broadcast(tell,iPickUp(I,D));
+			.my_name(Me);
+			!!goTo(Me,I).
+			
+	-!checkDistance(I,D)
+		<- .print("I am too far to ",I).
+			
+	
+			
+			
+			//.broadcast(tell,iPickUp(I,D)).
      		//.send(leader,tell,canHelp(I,D,Me)).
      		
-     //If not free, value distance 1000 		
-    +rescue(VX,VY,I)[source(A)]
-    	<-	.my_name(Ag);
-    		.broadcast(tell,iPickUp(I,1000)).
-     		
-    +iPickUp(I,D)[source(A)] 
-  		:  	.my_name(Me) & A \== Me & free &
-  			.count(iPickUp(I,_),2) & 
-  			.findall(val(D),iPickUp(I,D),L) &
-  			.min(L,val(CloserD)) &
-  			pos(Me,AgX,AgY) & pos(I,VX,VY) &
+    +iPickUp(I,D)[source(A)] : A\==self & not carryInjured &
+    		.my_name(Me) &
+    		pos(Me,AgX,AgY) &
+    		pos(I,VX,VY) &
 			intactions.dist(AgX,AgY,VX,VY,MyD) &
-			CloserD < MyD
-		<-	.print("ME ENVIARON DISTANCIA MAS CORTA A",I);
-			.abolish(iPickUp(I,D));
-			.print("There is someone else closer to ",I).
+			MyD < D
+    	<- 	.send(A,tell,closerTo(I));
+    		!!goTo(Me,I).
+    		
+    +closerTo(I)[source(A)] : A\==self
+    	<- 	.print("I want to help ",I," but ",A,
+    		" is already doing it"
+    	);
+    		+free;
+    		.drop_desire(goTo(_,I)).
+  			
 			
-	+iPickUp(I,D)[source(A)]
-		:	A \== self
-		<-	+goTo(I).
+	/* +iPickUp(I,D)[source(A)]
+		<-	.abolish(iPickUp(I,D)).*/
 	
 	//Information about where to go 
-	+goTo(I)
+	+!goTo(Ag,I)
 		:   .my_name(Ag) & free
 		<-	.print("my name is ",Ag, " and I am going to save ",I);
 			-free;
 			?pos(I,X,Y);
-			!save(X,Y,I). 
+			!save(X,Y,I).
 			
-	+goTo(Ag,I)[source(leader)]	: .my_name(Ag) & not free
-		<-	?pos(I,VX,VY);
-			.print("I am already helping someone!");
-			.broadcast(tell,rescue(VX,VY,I)).
-		           		
+	-!goTo(Ag,I)
+		<-	+free.
+	
+	@psave1[atomic]	           		
 	+!save(X,Y,I) : .my_name(Ag) & pos(Ag,X,Y) 
 		<-	.print("I have reached ",I," at coordinates ",X,", ",Y);
+			+carryInjured;
 			.kill_agent(I);
 			!scape(rescuer,door).
-			
+		
+	@psave2[atomic]	 	
 	+!save(X,Y,I)
   		<- 	?pos(I,X,Y)
   			move_towards(X,Y);
      		!save(X,Y,I).
+     
+    -!save(X,Y,I)
+     	<- true.
 	
 	+!scape(rescuer,door) : not scape(rescuer,door)
 		<-	.my_name(Ag); 

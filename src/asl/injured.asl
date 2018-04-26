@@ -27,7 +27,8 @@
 			?pos(Ag,VX,VY);
 			.print("I need help ",Ag," I am at ",VX,", ",VY);
 			move_towards(VX,VY); 
-			.broadcast(tell,rescue(VX,VY,Ag)).
+			.broadcast(tell,rescue(VX,VY,Ag));
+			.wait(1000);
+			!get(help).
 			
-		
 			
