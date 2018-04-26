@@ -5,7 +5,6 @@ MAS evacuation {
 	environment: evacuation.EvEnv
 
 	agents:
-		leader;
 		rescuer #4;
 		injured #3;
 		independant #10;

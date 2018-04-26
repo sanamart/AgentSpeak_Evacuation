@@ -14,15 +14,32 @@ free.
 			?pos(Me,AgX,AgY);
 			intactions.dist(AgX,AgY,VX,VY,D);
 			.print("My distance to ",I," is: ",D)
-     		.send(leader,tell,canHelp(I,D,Me)).
-     
-    //If not free, value distance 1000 		
+			.broadcast(tell,iPickUp(I,D)).
+     		//.send(leader,tell,canHelp(I,D,Me)).
+     		
+     //If not free, value distance 1000 		
     +rescue(VX,VY,I)[source(A)]
     	<-	.my_name(Ag);
-    		.send(leader,tell,canHelp(I,1000,Ag)).
+    		.broadcast(tell,iPickUp(I,1000)).
+     		
+    +iPickUp(I,D)[source(A)] 
+  		:  	.my_name(Me) & A \== Me & free &
+  			.count(iPickUp(I,_),2) & 
+  			.findall(val(D),iPickUp(I,D),L) &
+  			.min(L,val(CloserD)) &
+  			pos(Me,AgX,AgY) & pos(I,VX,VY) &
+			intactions.dist(AgX,AgY,VX,VY,MyD) &
+			CloserD < MyD
+		<-	.print("ME ENVIARON DISTANCIA MAS CORTA A",I);
+			.abolish(iPickUp(I,D));
+			.print("There is someone else closer to ",I).
+			
+	+iPickUp(I,D)[source(A)]
+		:	A \== self
+		<-	+goTo(I).
 	
 	//Information about where to go 
-	+goTo(Ag,I)[source(leader)]
+	+goTo(I)
 		:   .my_name(Ag) & free
 		<-	.print("my name is ",Ag, " and I am going to save ",I);
 			-free;
