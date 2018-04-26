@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="*.asl" kind="src" path="src/asl"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="lib" path="/home/santiago/Desktop/Tesis/jason-2.3-SNAPSHOT/libs/jason-2.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/santiago/Desktop/Tesis/jason-2.3-SNAPSHOT/examples/gold-miners/lib/search.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
