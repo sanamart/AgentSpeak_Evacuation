@@ -1,0 +1,16 @@
+MAS evacuation {
+
+	infrastructure: Centralised
+
+	environment: evacuation.EvEnv
+
+	agents:
+		leader;
+		rescuer #4;
+		injured #3;
+		independant #10;
+
+	aslSourcePath:
+		"src/asl";
+		
+}
