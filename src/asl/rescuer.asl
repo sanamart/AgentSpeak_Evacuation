@@ -49,7 +49,8 @@ free.
     	);
     		+free;
     		.drop_desire(goTo(_,I)).
-  			
+  
+  //santiago			
 			
 	/* +iPickUp(I,D)[source(A)]
 		<-	.abolish(iPickUp(I,D)).*/
