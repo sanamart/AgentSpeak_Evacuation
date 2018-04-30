@@ -1,4 +1,4 @@
-package intactions;
+package pathFinding;
 
 import jason.environment.grid.Location;
 
@@ -22,9 +22,5 @@ public class Node {
 		visited = false;
 		parent = null;
 	}
-
-	/*public void setParent(Node padre) {
-		this.parent = padre;
-	}*/
 
 }

@@ -6,86 +6,102 @@ free.
 
    /* Plans */
 	
-	//sending the leader my distance to "I"
+	//get the request from an injured
+	//and calculate the distance to it 
 	+rescue(VX,VY,I)[source(A)]: free
 		<-	.my_name(Me);
 			?pos(Me,AgX,AgY);
 			intactions.dist(AgX,AgY,VX,VY,D);
 			.print("My distance to ",I," is: ",D);
-			!checkDistance(VX,VY,I,D).
+			!checkDistance(I,D).
 	
 	-rescue(VX,VY,I)
 		<- true.
 			
-	+!checkDistance(VX,VY,I,D) : D < 20 & free
+	//if the distance is smaller than the 
+	//empirical value 25, then achieve the
+	//goal to save the injured		
+	+!checkDistance(I,D) : D < 25 & free
 		<-	.my_name(Me);
-			!!save(VX,VY,I).
+			!!save(I,D).
 			
-	-!checkDistance(VX,VY,I,D) : true
+	//if the distance is bigger than 25
+	//it is too far to help		
+	-!checkDistance(I,D) : true
 		<- .print("I am too far to ",I).
      
-     
-    @ppgd1[atomic] 		
-    +iPickUp(I,D)[source(A)] : A \== self &
+    
+    // someone else is closer to injured
+    // so drops the intention and remove from
+    // my belief base
+    @pu1[atomic] 		
+    +iPickUp(I,D)[source(A)] : A\==self &
     		.my_name(Me) &
     		pos(Me,AgX,AgY) &
     		pos(I,VX,VY) &
 			intactions.dist(AgX,AgY,VX,VY,MyD) &
-			D < MyD & .print("-----------comparar distancias-------------") &
-			.desire(save(VX,VY,I))
+			D < MyD &
+			.desire(save(I,MyD))
     	<- 	.print("I want to help ",I," but ",A,
-    		" is already doing it");
-    		.abolish(I);
-    		.drop_desire(save(VX,VY,I)).
+    		" is closer. Dropping my intention");
+    		+free;
+    		.drop_desire(save(I,MyD));
+    		.print("elimino la idea de recoger a ",I);
+	  		?pos(I,VX,VY);
+	  		-rescue(VX,VY,I)[source(_)];.
     
     
-    //---------------------PRUEBA---------------------
-    @ppgd2[atomic] 			
+    // someone else want to pick up injured
+    // but I am closer
+    @pu2[atomic] 			
     +iPickUp(I,D)[source(A)] :	
     		.my_name(Me) &
     		pos(Me,AgX,AgY) &
     		pos(I,VX,VY) &
 			intactions.dist(AgX,AgY,VX,VY,MyD) &
-			D < MyD & .print("comparar distancias") &
-			.desire(save(VX,VY,I))
-    	<- .broadcast(tell,picked(I)).
+			MyD < D & .print("comparar distancias") &
+			.desire(save(I,MyD))
+    	<- 	.print("CUANDO MI DISTANCIA ES MAS CORTA QUE ",A);
+    		!!save(I,MyD).
     	
-    
+    // someone else picked up and injured I know about,
+    // so drops the intention
     @ppgd[atomic]
 	+picked(I)[source(A)]
-	  :  pos(I,VX,VY) & .desire(save(VX,VY,I))
+	  :  pos(I,VX,VY) & .desire(save(I,_))
 	  <- .print(A," has taken ",I," that I am pursuing! Dropping my intention.");
-	     .abolish(I);
+	     //.abolish(I);
 	     ?pos(I,VX,VY); 
-	     .drop_desire(save(VX,VY,I));
+	     .drop_desire(save(I,_));
 	     +free.
 	
-	// someone else picked up a gold I know about,
+	// someone else picked up an injured I know about,
 	// remove from my belief base
-	// ------------------ SIRVE --------------------
 	+picked(I)
-	  <- 	.print("elimino la idea de recoger a ",I);
-	  		?pos(I,VX,VY);
-	  		-rescue(VX,VY,I)[source(_)];
+	  <- 	?pos(I,VX,VY);
+	  		-rescue(VX,VY,I,_)[source(_)];
 	  		+free.
 	
-	@psave1[atomic]	           		
-	+!save(X,Y,I) : .my_name(Ag) & pos(Ag,X,Y)
-		<-	.print("I have reached ",I," at coordinates ",X,", ",Y);
-			.broadcast(tell,picked(I));
-			.kill_agent(I);
-			!scape(rescuer,door).
-		
-	+!save(X,Y,I)
+	// will pick up injured "I" so move towards it
+	// and inform the others about it.	
+	+!save(I,D) : not donotHelp(I)
   		<- 	-free;
   			.broadcast(tell,iPickUp(I,D));
   			?pos(I,X,Y)
   			move_towards(X,Y);
-     		!save(X,Y,I).
+     		!save(I,D).
+     
+     //	once injured is reached inform the others	
+     +!save(I,D) : .my_name(Ag) & pos(Ag,X,Y) & pos(I,X,Y)
+		<-	.print("I have reached ",I," at coordinates ",X,", ",Y);
+			.broadcast(tell,picked(I));
+			.kill_agent(I);
+			!scape(rescuer,door).
      	  
-    -!save(X,Y,I)
+    -!save(I,D)
      	<- +free.
 	
+	// try to escape from the building
 	@pscape1[atomic]	  
 	+!scape(rescuer,door) : not scape(rescuer,door)
 		<-	.my_name(Ag); 
@@ -95,6 +111,7 @@ free.
 	     	move_towards(A,B);
 			!scape(rescuer,door).
 	
+	// I reached the door so I am free again to help
 	@pscape2[atomic]     		
 	+!scape(rescuer,door) : scape(rescuer,door) 
 		<- 	+free; 

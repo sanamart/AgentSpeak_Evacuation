@@ -1,7 +1,8 @@
-package intactions;
+package pathFinding;
 
 import java.util.*;
-import intactions.Node;
+
+import pathFinding.Node;
 import jason.environment.grid.Location;
 import evacuation.*;
 
@@ -16,7 +17,8 @@ public class PathFinding {
 	List path;
 
 	/**
-	 * Constructor Initializes the start and target Nodes, and the 3 relevelant
+	 * Constructor Initializes the start and target
+	 * Nodes, and the 3 relevant
 	 * lists for the algorithm
 	 */
 	public PathFinding() {
@@ -28,9 +30,9 @@ public class PathFinding {
 	}
 
 	/**
-	 * calls the method to initialize the algorithm and return the next next
-	 * step (x,y) to reached by an agent
-	 * 
+	 * calls the method to initialize the 
+	 * algorithm and return the next step 
+	 * (x,y) to reached by an agent
 	 * @return x and y coordinates
 	 */
 	public Location getNextStep() {

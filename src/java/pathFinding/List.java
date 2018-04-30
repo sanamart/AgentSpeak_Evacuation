@@ -1,4 +1,4 @@
-package intactions;
+package pathFinding;
 
 public class List {
 	public Node first, last, current;
@@ -81,7 +81,7 @@ public class List {
 	}
 
 	/**
-	 * checks wether the list is empty
+	 * checks whether the list is empty
 	 * 
 	 * @return true or false
 	 */

@@ -65,7 +65,7 @@ public class EvView extends GridWorldView {
 
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-		//if (!mod.isOut) {
+	
 			String label;
 			
 			if (id < 10) {
@@ -82,14 +82,13 @@ public class EvView extends GridWorldView {
 			g.setColor(Color.black);
 
 			super.drawString(g, x, y, defaultFont, label);
-			// repaint();
-		//}
+			
 	}
 
 	public void drawDoor(Graphics g, int x, int y) {
 		super.drawObstacle(g, x, y);
 		g.setColor(Color.white);
-		drawString(g, x, y, defaultFont, "DOOR");
+		drawString(g, x, y, defaultFont, "D");
 	}
 
 	public void drawFire(Graphics g, int x, int y) {

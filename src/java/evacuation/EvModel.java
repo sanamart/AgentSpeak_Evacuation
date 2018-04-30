@@ -1,9 +1,8 @@
 package evacuation;
 
-import intactions.PathFinding;
-
 import java.util.Random;
 
+import pathFinding.PathFinding;
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
 

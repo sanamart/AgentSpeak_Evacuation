@@ -21,7 +21,7 @@
 			!get(help).
 	
 	//Ask for help
-	//broadcast with my coordinates
+	//broadcast my coordinates
 	+!get(help):true
 		<- 	.my_name(Ag); 
 			?pos(Ag,VX,VY);

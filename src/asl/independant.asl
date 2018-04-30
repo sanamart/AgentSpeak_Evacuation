@@ -1,4 +1,4 @@
-// Agent independant in project evacuation
+// Agent independent in project evacuation
 
 /* Initial beliefs */
 
@@ -9,6 +9,9 @@ inBuilding.
 !start.
 
 /* Plans */
+
+	// independent agents just walk around
+	// and escape when there is an emergency
 
 	+!start : true 
 	<-	.print("I am working.");
@@ -24,19 +27,19 @@ inBuilding.
 	+!leave(building)
 		: true
 		<- 	.print("I will leave the building.");
-			!ata(independant,door).
+			!scape(independant,door).
 
-	+!ata(independant,D) : not ata(independant,D) 
+	+!scape(independant,D) : not scape(independant,D) 
 		<- 	.my_name(Ag); 
 			?pos(Ag,AgX,AgY);
 			intactions.door(AgX,AgY,L);
 			?pos(L,A,B);
 	     	move_towards(A,B);
-			!ata(independant,D).
+			!scape(independant,D).
 			
-	-!ata(independant,D) : true <- !ata(independant,D).
+	-!scape(independant,D) : true <- !scape(independant,D).
 	           
-	+!ata(independant,D) : ata(independant,D) 
+	+!scape(independant,D) : scape(independant,D) 
 		<- 	-inBuilding;
 			.print("I am out of the building!").
 		
