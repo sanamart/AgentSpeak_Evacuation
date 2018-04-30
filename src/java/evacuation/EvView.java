@@ -14,7 +14,7 @@ public class EvView extends GridWorldView {
 	public EvView(EvModel model) {
 		super(model, "Ev World", 600);
 		mod = model;
-		defaultFont = new Font("Arial", Font.BOLD, 18); // change default font
+		defaultFont = new Font("Arial", Font.BOLD, 18);
 		setVisible(true);
 		repaint();
 	}
@@ -65,7 +65,7 @@ public class EvView extends GridWorldView {
 
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-		//if (!mod.isOut) {
+		
 			String label;
 			
 			if (id < 10) {
@@ -82,14 +82,13 @@ public class EvView extends GridWorldView {
 			g.setColor(Color.black);
 
 			super.drawString(g, x, y, defaultFont, label);
-			// repaint();
-		//}
+			
 	}
 
 	public void drawDoor(Graphics g, int x, int y) {
 		super.drawObstacle(g, x, y);
 		g.setColor(Color.white);
-		drawString(g, x, y, defaultFont, "DOOR");
+		drawString(g, x, y, defaultFont, "D");
 	}
 
 	public void drawFire(Graphics g, int x, int y) {
@@ -108,7 +107,7 @@ public class EvView extends GridWorldView {
 		vx[3] = x * cellSizeW;
 		vy[3] = y * cellSizeH + (cellSizeH / 2);
 		g.fillPolygon(vx, vy, 4);
-		EvEnv.fire = true;
+		EvModel.setFire();
 	}
 
 }

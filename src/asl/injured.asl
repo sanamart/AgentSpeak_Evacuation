@@ -12,22 +12,24 @@
 	/* Plans */
 
 	+!work : not alarm
-		<- 	next(slot);
+		<- 	nextSlot;
 			!work.
 	
 	+!work : alarm
 		<-	-healthy;
 			.wait(500);
-			!get(help).
+			!getHelp.
 	
 	//Ask for help
 	//broadcast with my coordinates
-	+!get(help):true
+	+!getHelp:true
 		<- 	.my_name(Ag); 
 			?pos(Ag,VX,VY);
 			.print("I need help ",Ag," I am at ",VX,", ",VY);
 			move_towards(VX,VY); 
-			.broadcast(tell,rescue(VX,VY,Ag)).
+			.broadcast(tell,rescue(VX,VY,Ag));
+			.wait(3000);
+			!getHelp.
 			
 		
 			

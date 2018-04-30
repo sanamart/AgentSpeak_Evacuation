@@ -1,4 +1,4 @@
-package intactions;
+package pathFinding;
 
 import jason.environment.grid.Location;
 

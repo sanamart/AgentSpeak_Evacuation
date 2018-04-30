@@ -14,12 +14,10 @@ public class EvEnv extends Environment {
 
 	public static int sleep = 350;
 
-	public static final Term ns = Literal.parseLiteral("next(slot)");
+	public static final Term ns = Literal.parseLiteral("nextSlot");
 	public static final Literal al = Literal.parseLiteral("alarm");
-	public static final Literal rad = Literal.parseLiteral("scape(rescuer,door)");
-	public static final Literal iad = Literal.parseLiteral("ata(independant,door)");
-
-	static boolean fire = false;
+	public static final Literal rad = Literal.parseLiteral("escape(rescuer,door)");
+	public static final Literal iad = Literal.parseLiteral("escape(independent,door)");
 
 	/** Called before the MAS execution evacuation.mas2j */
 	@Override
@@ -121,7 +119,7 @@ public class EvEnv extends Environment {
 				+ l.y + ")");
 
 		addPercept(pos1);
-		if (model.hasObject(model.DOOR, l)) {
+		if (model.hasObject(EvModel.DOOR, l)) {
 			if (ag >= 12) {
 				addPercept(agName, rad);
 			} else {
@@ -129,7 +127,7 @@ public class EvEnv extends Environment {
 			}
 		}
 
-		if (fire)
+		if (EvModel.fire())
 			addPercept(al);
 	}
 }

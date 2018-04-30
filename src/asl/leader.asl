@@ -14,14 +14,18 @@
 		<-	!allocate_rescuer(I);
 			.abolish(canHelp(I,_,_)).
 			
-	//choosing the agent closest to I (injured)		
+	//choosing the agent closer to I (injured)		
 	+!allocate_rescuer(I)
 		<-	.findall(val(D,Rs),canHelp(I,D,Rs),RL);
 			.print("Help list for ",I," : ",RL);
 			.min(RL,val(CloserD,RS));
 			CloserD < 1000;
 			.print(RS, " will help ", I );
-			.broadcast(tell,goTo(RS,I)). //inform agent RS (rescuer) to pick up I (injured)
+			.send(RS,achieve,goTo(I)). 
+			//inform agent RS (rescuer) to pick up I (injured)
 			
 	-!allocate_rescuer(inj)
 		<-	.print("could not allocate injured").
+		
+	+alarm : true 
+		<-	.print("------------There is an emergency!-------------").

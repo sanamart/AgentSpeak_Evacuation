@@ -1,4 +1,4 @@
-package intactions;
+package pathFinding;
 
 public class List {
 	public Node first, last, current;

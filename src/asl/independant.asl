@@ -1,4 +1,4 @@
-// Agent independant in project evacuation
+// Agent independent in project evacuation
 
 /* Initial beliefs */
 
@@ -10,33 +10,48 @@ inBuilding.
 
 /* Plans */
 
+	// independent agents just walk around
+	// and escape when there is an emergency
+
 	+!start : true 
 	<-	.print("I am working.");
 		!work.
 
 	+!work : not alarm
-		<- 	next(slot);
+		<- 	nextSlot;
 			!work.
 	
 	+!work : alarm
-		<-	!leave(building).
+		<-	.time(_,MM,SS);
+			+myTime(MM,SS);
+			!leaveBuilding.
 		
-	+!leave(building)
-		: true
+	+!leaveBuilding
+		: 	true
 		<- 	.print("I will leave the building.");
-			!ata(independant,door).
+			!escape(independent,door).
 
-	+!ata(independant,D) : not ata(independant,D) 
+	+!escape(independent,D) : not escape(independent,D) 
 		<- 	.my_name(Ag); 
 			?pos(Ag,AgX,AgY);
 			intactions.door(AgX,AgY,L);
 			?pos(L,A,B);
 	     	move_towards(A,B);
-			!ata(independant,D).
+			!escape(independent,D).
 			
-	-!ata(independant,D) : true <- !ata(independant,D).
+	-!escape(independent,D) : true <- !escape(independent,D).
 	           
-	+!ata(independant,D) : ata(independant,D) 
+	+!escape(independent,D) : escape(independent,D) 
 		<- 	-inBuilding;
-			.print("I am out of the building!").
+			.time(_,MM2,SS2);
+			?myTime(MM,SS);
+			.print("I am out of the building!");
+			if(SS2<SS) {
+				.print("I left the building in ",MM2-MM-1
+				," minutes and ",(SS2-SS)+60," seconds.")
+			}else{
+				.print("I left the building in ",MM2-MM
+				," minutes and ",SS2-SS," seconds.")
+				}
+			.
 		

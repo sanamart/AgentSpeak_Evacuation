@@ -1,5 +1,5 @@
 MAS evacuation {
-
+	/* Main version */
 	infrastructure: Centralised
 
 	environment: evacuation.EvEnv

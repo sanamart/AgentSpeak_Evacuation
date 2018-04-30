@@ -1,7 +1,8 @@
-package intactions;
+package pathFinding;
 
 import java.util.*;
-import intactions.Node;
+
+import pathFinding.Node;
 import jason.environment.grid.Location;
 import evacuation.*;
 
