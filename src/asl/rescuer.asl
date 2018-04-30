@@ -92,12 +92,11 @@ free.
      
     //	once injured is reached inform the others
     @save2[atomic]	
-    +!save(X,Y,I,D) : .my_name(Ag) & pos(Ag,X,Y) & .print("----INTENTANDO LA LLEGADA----")
-		<-	.print("I have reached ",I," at coordinates ",X,", ",Y);
+    +!save(VX,VY,I,D) : .my_name(Ag) & pos(Ag,X,Y) & VX==X & VY==Y
+		<-	.print("SIRVAAAAAAAAAAAAAAA");.print("I have reached ",I," at coordinates ",X,", ",Y);
 			.broadcast(tell,picked(I));
 			.kill_agent(I);
 			!scape(rescuer,door).
-    
     @save3[atomic]	  
     -!save(VX,VY,I,D)
      	<- +free.
