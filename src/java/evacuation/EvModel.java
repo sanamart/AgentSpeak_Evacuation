@@ -8,10 +8,12 @@ import jason.environment.grid.Location;
 
 public class EvModel extends GridWorldModel {
 
-	public static final int DOOR = 32; // garbage code in grid model
-	public static final int FIRE = 64;
-	public static final int GSize = 26; // grid size
-	//public boolean isOut = false;
+	public static final int DOOR = 32;
+	public static final int EMERGENCY = 64;
+	public static final int GSize = 26;
+	
+	static boolean emergency = false;
+	
 	public Location ldoor1 = new Location(9, 0);
 	public Location ldoor2 = new Location(16, 0);
 	public Location ldoor3 = new Location(9, 25);
@@ -66,6 +68,14 @@ public class EvModel extends GridWorldModel {
 		setAgPos(agId, next);
 
 		return true;
+	}
+	
+	public static void setEmergency() {
+		emergency = true;
+	}
+	
+	public static boolean emergency() {
+		return emergency;
 	}
 
 	EvModel() {

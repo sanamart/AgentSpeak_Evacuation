@@ -105,7 +105,7 @@ public class PathFinding {
 						// the closed list
 						if ((!(mod.inGrid(neighbor.x, neighbor.y)
 								&& (mod.isFreeOfObstacle(neighbor.x, neighbor.y)) && !mod
-									.hasObject(EvModel.FIRE, neighbor.x,
+									.hasObject(EvModel.EMERGENCY, neighbor.x,
 											neighbor.y)))
 								|| inClosed(neighbor)) {
 							continue;// lo ignoro

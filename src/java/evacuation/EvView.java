@@ -30,7 +30,7 @@ public class EvView extends GridWorldView {
 				if (col >= 0 && lin >= 0 && col < getModel().getWidth()
 						&& lin < getModel().getHeight()) {
 					EvModel evm = (EvModel) model;
-					evm.add(EvModel.FIRE, col, lin);
+					evm.add(EvModel.EMERGENCY, col, lin);
 					update(col, lin);
 				}
 			}
@@ -57,8 +57,8 @@ public class EvView extends GridWorldView {
 		case EvModel.DOOR:
 			drawDoor(g, x, y);
 			break;
-		case EvModel.FIRE:
-			drawFire(g, x, y);
+		case EvModel.EMERGENCY:
+			drawEmergencyBlock(g, x, y);
 			break;
 		}
 	}
@@ -91,7 +91,7 @@ public class EvView extends GridWorldView {
 		drawString(g, x, y, defaultFont, "D");
 	}
 
-	public void drawFire(Graphics g, int x, int y) {
+	public void drawEmergencyBlock(Graphics g, int x, int y) {
 		super.drawObstacle(g, x, y);
 		g.setColor(Color.red);
 		g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4,
@@ -107,7 +107,7 @@ public class EvView extends GridWorldView {
 		vx[3] = x * cellSizeW;
 		vy[3] = y * cellSizeH + (cellSizeH / 2);
 		g.fillPolygon(vx, vy, 4);
-		EvEnv.fire = true;
+		EvModel.setEmergency();
 	}
 
 }

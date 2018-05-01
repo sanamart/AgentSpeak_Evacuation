@@ -18,28 +18,39 @@ inBuilding.
 		!work.
 
 	+!work : not alarm
-		<- 	next(slot);
+		<- 	nextSlot;
 			!work.
 	
 	+!work : alarm
-		<-	!leave(building).
+		<-	.time(_,MM,SS);
+			+myTime(MM,SS);
+			!leaveBuilding.
 		
-	+!leave(building)
-		: true
+	+!leaveBuilding
+		: 	true
 		<- 	.print("I will leave the building.");
-			!scape(independant,door).
+			!escape(independent,door).
 
-	+!scape(independant,D) : not scape(independant,D) 
+	+!escape(independent,D) : not escape(independent,D) 
 		<- 	.my_name(Ag); 
 			?pos(Ag,AgX,AgY);
 			intactions.door(AgX,AgY,L);
 			?pos(L,A,B);
 	     	move_towards(A,B);
-			!scape(independant,D).
+			!escape(independent,D).
 			
-	-!scape(independant,D) : true <- !scape(independant,D).
+	-!escape(independent,D) : true <- !escape(independent,D).
 	           
-	+!scape(independant,D) : scape(independant,D) 
+	+!escape(independent,D) : escape(independent,D) 
 		<- 	-inBuilding;
-			.print("I am out of the building!").
-		
+			.time(_,MM2,SS2);
+			?myTime(MM,SS);
+			.print("I am out of the building!");
+			if(SS2<SS) {
+				.print("I left the building in ",MM2-MM-1
+				," minutes and ",(SS2-SS)+60," seconds.")
+			}else{
+				.print("I left the building in ",MM2-MM
+				," minutes and ",SS2-SS," seconds.")
+				}
+			.

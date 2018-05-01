@@ -1,8 +1,7 @@
 // Agent injured in project evacuation
 
 	/* Initial beliefs */
-	
-	inBuilding.
+
 	healthy.
 	
 	/* Initial goals */
@@ -12,23 +11,23 @@
 	/* Plans */
 
 	+!work : not alarm
-		<- 	next(slot);
+		<- 	nextSlot;
 			!work.
 	
 	+!work : alarm
 		<-	-healthy;
 			.wait(500);
-			!get(help).
+			!getHelp.
 	
 	//Ask for help
 	//broadcast my coordinates
-	+!get(help):true
-		<- 	.my_name(Ag); 
-			?pos(Ag,VX,VY);
-			.print("I need help ",Ag," I am at ",VX,", ",VY);
-			move_towards(VX,VY); 
-			.broadcast(tell,rescue(VX,VY,Ag));
+	+!getHelp	:true
+		<- 	.my_name(Me); 
+			?pos(Me,X,Y);
+			.print("I need help ",Me,
+			" I am at ",X,", ",Y);
+			.broadcast(tell,rescue(X,Y,Me));
 			.wait(3000);
-			!get(help).
+			!getHelp.
 			
 			
